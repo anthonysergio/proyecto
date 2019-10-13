@@ -41,4 +41,7 @@ public function sendPasswordResetNotification($token)
 {
    $this->notify(new MiResetPasswordPersonalizado($token));
 }
+public function roles(){
+    return $this->belongsToMany(Rol::class, 'user_rol', 'user_id', 'rol_id');
+}
 }
