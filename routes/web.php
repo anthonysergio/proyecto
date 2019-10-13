@@ -19,6 +19,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('administracion/roles', 'RolController');
+
+Route::get('administracion/roles_ajax', 'RolController@roles_ajax'); 
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
