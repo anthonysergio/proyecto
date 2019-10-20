@@ -20,8 +20,10 @@ Route::get('/', function () {
 });
 
 Route::resource('administracion/roles', 'RolController');
+Route::resource('administracion/usuario', 'UserController');
 
 Route::get('administracion/roles_ajax', 'RolController@roles_ajax'); 
+Route::get('administracion/usuarios_ajax', 'UserController@ajax'); 
 
 Auth::routes();
 

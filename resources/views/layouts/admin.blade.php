@@ -165,6 +165,20 @@
                   </li>
 
 
+                  <li class="treeview">
+                    <a href="#">
+                      <i class="fa fa-user"></i>
+                      <span>Usuarios</span>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{route('usuario.index') }}"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="{{route('usuario.create') }}"><i class="fa fa-circle-o"></i> Agregar</a></li>
+                    </ul>
+                  </li>
+
 
 
             </ul>

@@ -20,7 +20,7 @@ class CreateUserRolTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')
                     ->onDelete('cascade');
             $table->foreign('rol_id')->references('id')->on('roles')
-                    ->onDelete('cascade');php
+                    ->onDelete('cascade');
         });
     }
 
