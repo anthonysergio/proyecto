@@ -227,6 +227,8 @@
 
     <script src="{{url('administration/dist/js/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{url('administration/dist/js/dataTables.responsive.min.js')}}"></script>
+    <script src="{{url('administration/js/validaNumerosLetras.js')}}"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
 
 

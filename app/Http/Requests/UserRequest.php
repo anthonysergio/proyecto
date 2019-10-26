@@ -13,7 +13,7 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return true;   /* se deber colocar true para que funcione el metodo */
     }
 
     /**

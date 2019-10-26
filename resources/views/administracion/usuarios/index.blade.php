@@ -87,6 +87,7 @@
 
 <script src="{{url('frontend/js/sweetalert.min.js')}}"></script>
     <script type="text/javascript">
+    
 
 
         $(document).ready(function() {

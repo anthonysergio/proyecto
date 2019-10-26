@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\DB;
 use DataTables;
 use Illuminate\Support\Facades\Hash;
 use App\Rol;
@@ -45,8 +46,10 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $imagen = $request->file('path');
-        $imagen->move(public_path('imagenes'), $imagen->getClientOriginalName());
+      
+       
+        $imagen = $request->file('path');  /** obtener la imagenes del campo path*/
+        $imagen->move(public_path('imagenes'), $imagen->getClientOriginalName()); /** mover la imagen a la carpeta imagenes y obtener el nombre  */
         
 
        $usuario= User::create([
@@ -117,10 +120,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
+        $user = User::find($id);
+        $user->estado = 0;
+        $user->save();
+
+        DB::table('user_rol')->where('user_id', $user->id)->delete();
+
+        $message = "Eliminado Correctamente";
+        if ($request->ajax()) {
+            return response()->json([
+               
+                'message' => $message
+            ]);
+        }
     }
+ 
     public function ajax(Request $request)
     {
 
@@ -139,7 +155,7 @@ class UserController extends Controller
                         $url = route('usuario.edit',['parameters' => $row->id]);
    
                            $btn = '<a title="Editar" style="cursor:pointer;" href="'.$url. '" role="button"><i class="fa fa-edit"></i></a>
-                            <a title="Eliminar" style="cursor:pointer;"   onclick="eliminar_usuario'.$row->id.')" class="btn-delete" role="button"><i class="fa fa-trash"></i></a>';
+                            <a title="Eliminar" style="cursor:pointer;"   onclick="eliminar_usuario('.$row->id.')" class="btn-delete" role="button"><i class="fa fa-trash"></i></a>';
      
                             return $btn;
                     })
@@ -148,5 +164,76 @@ class UserController extends Controller
         
       
       
+    }
+
+    public function buscar_cedula_usuario(Request $request)
+    {
+       if($request->ajax()){
+          
+           $cedula=$request->cedula;
+           $usuarios = User::where('cedula', $cedula)->get();
+
+              if(count($usuarios) > 0) {
+
+   
+                 
+                   return response()->json("existe");
+    
+                }else{
+
+            
+                 
+
+                 return response()->json("no_existe");
+
+
+                }
+           } 
+
+
+       }
+
+       public function buscar_email_usuario(Request $request)
+       {
+   
+           if($request->ajax()){
+             
+               $email=$request->email;
+
+               $usuarios= User::where('email', $email)->get();
+               if(count($usuarios) > 0) {
+                return response()->json("existe");
+    
+               }else{
+              
+                return response()->json("no_existe");
+    
+               }
+    
+               
+    
+           }
+   
+   
+       
+   
+       }
+    
+
+       
+    public function cargar_roles(Request $request)
+    {
+        $search = $request->get('search');
+
+        $data = DB::table('roles')
+        ->where('roles.rol', 'like', $search.'%')
+        ->where('roles.estado', '=', 1)
+        ->paginate(5);
+
+       
+
+        //$data=  DB::select(" select id, nombre from grupocontactos where nombre like  ? and estado=1 and id in (select grupo_id from contacto_grupo_contacto where contacto_id in (select id from contactos where id_user = ?))", ['"%' . $search . '%"', Auth::user()->id] );
+       // $data = GrupoContacto::select(['id', 'nombres_apellidos'])->where('nombres_apellidos', 'like', '%' . $search . '%')->where('estado', 1)->where('activo',1)->orderBy('nombres_apellidos')->where('id_user', Auth::user()->id)->paginate(5);
+        return response()->json(['items' => $data->toArray()['data'], 'pagination' => $data->nextPageUrl() ? true : false]);
     }
 }
